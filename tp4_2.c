@@ -10,6 +10,7 @@ typedef struct Tarea {
 
 void cargarTareas (tarea **Tareas, int cantTareas);
 void mostrarTareas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
+void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
 
 int main(){
     int cantTareas;
@@ -56,11 +57,28 @@ void cargarTareas (tarea **Tareas, int cantTareas)
 
 void mostrarTareas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas)
 {    
+    int realizado;
     for (int j=0; j<cantTareas; j++)
     {
         printf("-->Tarea %d \n",(*(Tareas+j))->TareaID);
         printf("%s\n",(*(Tareas+j))->Descripcion);
         printf("Duracion: %d\n\n",(*(Tareas+j))->Duracion);
+
+        printf("\t¿Se realizo la Tarea?(1.Si  0.No)\n");
+        scanf("%i",&realizado);
+        if(realizado==1){
+
+            (*(TareasRealizadas+j))->TareaID = (*(Tareas+j))->TareaID;
+            strcpy((*(TareasRealizadas+j))->Descripcion , (*(Tareas+j))->Descripcion);
+            (*(TareasRealizadas+j))->Duracion = (*(Tareas+j))->Duracion;
+
+            (*(Tareas+j))=NULL;
+
+        }else{
+            (*(TareasRealizadas+j))=NULL;
+        }   
+
+
     }
     
 }
