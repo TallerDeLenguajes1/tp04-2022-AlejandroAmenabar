@@ -12,7 +12,7 @@ void cargarTareas (tarea **Tareas, int cantTareas);
 void mostrarTareas (tarea **Tareas, int cantTareas);
 void revisarTareas (tarea** Tareas,tarea **, int cantTareas);
 void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
-
+tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas);
 
 int main(){
 
@@ -34,6 +34,13 @@ int main(){
     revisarTareas(Tareas,TareasRealizadas,cantTareas);
     mostrarTareasRealizadas(Tareas,TareasRealizadas,cantTareas);
 
+    tareaBuscada = BuscarTarea(Tareas,TareasRealizadas, cantTareas);
+    if(tareaBuscada != NULL){
+        printf("\n------- TAREA ENCONTRADA por id-------\n");
+        printf("Tarea ID: %d\n", tareaBuscada->TareaID);
+        printf("Descripcion: %s\n", tareaBuscada->Descripcion);
+        printf("Duracion: %d\n", tareaBuscada->Duracion);
+    }
 
 
     free(Tareas);
@@ -129,3 +136,22 @@ void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantT
     }
 }
 
+tarea  *BuscarTarea (tarea **Tareas,tarea **TareasRealizadas, int cantTareas)
+{
+    int ID;
+    printf("\nIngrese el ID para buscar la tarea:\n");
+    scanf("%d", &ID);
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (Tareas[i]!= NULL && Tareas[i]->TareaID == ID)
+        {
+            return Tareas[i];
+        }
+        else if (TareasRealizadas[i]!= NULL && TareasRealizadas[i]->TareaID == ID)
+        {
+            return TareasRealizadas[i];
+        }
+    }
+    printf("No se encontraron coincidencias\n");
+    return NULL;
+}
