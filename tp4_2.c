@@ -12,6 +12,7 @@ void cargarTareas (tarea **Tareas, int cantTareas);
 void mostrarTareas (tarea **Tareas, int cantTareas);
 void revisarTareas (tarea** Tareas,tarea **, int cantTareas);
 void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
+tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas);
 
 
 int main(){
@@ -34,7 +35,14 @@ int main(){
     revisarTareas(Tareas,TareasRealizadas,cantTareas);
     mostrarTareasRealizadas(Tareas,TareasRealizadas,cantTareas);
 
-
+    fflush(stdin);
+    tareaBuscada2 = BuscarTarea(Tareas,TareasRealizadas, cantTareas);
+    if(tareaBuscada2 != NULL){
+        printf("\n------- TAREA ENCONTRADA por palabra-------\n");
+        printf("Tarea ID: %d\n", tareaBuscada2->TareaID);
+        printf("Descripcion: %s\n", tareaBuscada2->Descripcion);
+        printf("Duracion: %d\n", tareaBuscada2->Duracion);
+    }
 
     free(Tareas);
     free(TareasRealizadas);
@@ -129,3 +137,24 @@ void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantT
     }
 }
 
+tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas)
+{
+    char *buffer = (char *)malloc(15*sizeof(char));
+    printf("\nIngrese la palabra para buscar la tarea:\n");
+    gets(buffer);
+    for (int i=0; i < cantTareas; i++)
+    {
+        if (Tareas[i]!=NULL && strstr(Tareas[i]->Descripcion, buffer))
+        {
+            return Tareas[i];
+        }
+        else if (TareasRealizadas[i]!=NULL && strstr(TareasRealizadas[i]->Descripcion, buffer))
+        {
+            return TareasRealizadas[i];
+            free(buffer);//tal vez debe ir ahi en cada return?
+        }
+    }
+    free(buffer); //¿lo esta eliminando o sale antes?
+    return NULL;
+    
+}
