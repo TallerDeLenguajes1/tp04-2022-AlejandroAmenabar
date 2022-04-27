@@ -9,15 +9,19 @@ typedef struct Tarea {
 } tarea;
 
 void cargarTareas (tarea **Tareas, int cantTareas);
-void mostrarTareas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
+void mostrarTareas (tarea **Tareas, int cantTareas);
+void revisarTareas (tarea** Tareas,tarea **, int cantTareas);
 void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
 
+
 int main(){
+
     int cantTareas;
     tarea **Tareas;
     tarea **TareasRealizadas;
-
-
+    tarea *tareaBuscada;
+    tarea *tareaBuscada2;
+    
     printf("Ingrese la Cantidad de tareas a cargar\n");
     scanf("%d",&cantTareas);
     
@@ -26,7 +30,12 @@ int main(){
     
 
     cargarTareas(Tareas,cantTareas);
-    mostrarTareas(Tareas,TareasRealizadas,cantTareas);
+    mostrarTareas(Tareas,cantTareas);
+    revisarTareas(Tareas,TareasRealizadas,cantTareas);
+    mostrarTareasRealizadas(Tareas,TareasRealizadas,cantTareas);
+
+
+
     free(Tareas);
     free(TareasRealizadas);
     
@@ -55,30 +64,68 @@ void cargarTareas (tarea **Tareas, int cantTareas)
     free(buff);
 }
 
-void mostrarTareas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas)
+void mostrarTareas (tarea **Tareas, int cantTareas)
 {    
-    int realizado;
+    
     for (int j=0; j<cantTareas; j++)
     {
         printf("-->Tarea %d \n",(*(Tareas+j))->TareaID);
         printf("%s\n",(*(Tareas+j))->Descripcion);
         printf("Duracion: %d\n\n",(*(Tareas+j))->Duracion);
+    }
+    
+}
 
+void revisarTareas (tarea** Tareas, tarea ** TareasRealizadas, int cantTareas)
+{
+    int realizado;
+    for (int j=0; j<cantTareas; j++)
+    {
         printf("\t¿Se realizo la Tarea?(1.Si  0.No)\n");
         scanf("%i",&realizado);
         if(realizado==1){
-
+            *(TareasRealizadas+j)=(tarea *)malloc(sizeof(tarea)); //me faltaba reservar el espacio de memoria de cada elemento tipo tarea del puntero doble tareasRealizadas
+            
             (*(TareasRealizadas+j))->TareaID = (*(Tareas+j))->TareaID;
+
+            (*(TareasRealizadas+j))->Descripcion = (char *) malloc(strlen((*(Tareas+j))->Descripcion) * sizeof(char));
             strcpy((*(TareasRealizadas+j))->Descripcion , (*(Tareas+j))->Descripcion);
+
             (*(TareasRealizadas+j))->Duracion = (*(Tareas+j))->Duracion;
 
             (*(Tareas+j))=NULL;
 
         }else{
+            
             (*(TareasRealizadas+j))=NULL;
         }   
-
-
     }
     
 }
+void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas)
+{
+    printf("\n---------- TAREAS REALIZADAS ----------\n");
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (TareasRealizadas[i] != NULL)
+        {
+            printf("----------------------------------------\n");
+            printf("Tarea ID: %d\n", TareasRealizadas[i]->TareaID);
+            printf("Descripcion: %s\n", TareasRealizadas[i]->Descripcion);
+            printf("Duracion: %d\n", TareasRealizadas[i]->Duracion);
+        }
+    }
+
+    printf("\n---------- TAREAS PENDIENTES ----------\n");
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (Tareas[i] != NULL)
+        {
+            printf("----------------------------------------\n");
+            printf("Tarea ID: %d\n", Tareas[i]->TareaID);
+            printf("Descripcion: %s\n", Tareas[i]->Descripcion);
+            printf("Duracion: %d\n", Tareas[i]->Duracion);
+        }
+    }
+}
+
