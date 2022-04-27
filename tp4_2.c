@@ -12,7 +12,8 @@ void cargarTareas (tarea **Tareas, int cantTareas);
 void mostrarTareas (tarea **Tareas, int cantTareas);
 void revisarTareas (tarea** Tareas,tarea **, int cantTareas);
 void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantTareas);
-tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas);
+tarea *BuscarTareaId (tarea **Tareas, tarea **TareasRealizadas, int cantTareas);
+tarea *BuscarTareaPalabra (tarea **Tareas, tarea **TareasRealizadas, int cantTareas);
 
 
 int main(){
@@ -36,13 +37,21 @@ int main(){
     mostrarTareasRealizadas(Tareas,TareasRealizadas,cantTareas);
 
     fflush(stdin);
-    tareaBuscada2 = BuscarTarea(Tareas,TareasRealizadas, cantTareas);
-    if(tareaBuscada2 != NULL){
+    tareaBuscada = BuscarTareaId(Tareas,TareasRealizadas, cantTareas);
+    if(tareaBuscada != NULL){
         printf("\n------- TAREA ENCONTRADA por palabra-------\n");
+        printf("Tarea ID: %d\n", tareaBuscada->TareaID);
+        printf("Descripcion: %s\n", tareaBuscada->Descripcion);
+        printf("Duracion: %d\n", tareaBuscada->Duracion);
+    }
+    tareaBuscada2 = BuscarTareaPalabra(Tareas,TareasRealizadas, cantTareas);
+    if(tareaBuscada2 != NULL){
+        printf("\n------- TAREA ENCONTRADA por id-------\n");
         printf("Tarea ID: %d\n", tareaBuscada2->TareaID);
         printf("Descripcion: %s\n", tareaBuscada2->Descripcion);
         printf("Duracion: %d\n", tareaBuscada2->Duracion);
     }
+
 
     free(Tareas);
     free(TareasRealizadas);
@@ -137,7 +146,7 @@ void mostrarTareasRealizadas (tarea **Tareas,tarea **TareasRealizadas, int cantT
     }
 }
 
-tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas)
+tarea *BuscarTareaId (tarea **Tareas, tarea **TareasRealizadas, int cantTareas)
 {
     char *buffer = (char *)malloc(15*sizeof(char));
     printf("\nIngrese la palabra para buscar la tarea:\n");
@@ -156,5 +165,24 @@ tarea *BuscarTarea (tarea **Tareas, tarea **TareasRealizadas, int cantTareas)
     }
     free(buffer); //¿lo esta eliminando o sale antes?
     return NULL;
-    
+}
+
+tarea  *BuscarTareaPalabra (tarea **Tareas,tarea **TareasRealizadas, int cantTareas)
+{
+    int ID;
+    printf("\nIngrese el ID para buscar la tarea:\n");
+    scanf("%d", &ID);
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (Tareas[i]!= NULL && Tareas[i]->TareaID == ID)
+        {
+            return Tareas[i];
+        }
+        else if (TareasRealizadas[i]!= NULL && TareasRealizadas[i]->TareaID == ID)
+        {
+            return TareasRealizadas[i];
+        }
+    }
+    printf("No se encontraron coincidencias\n");
+    return NULL;
 }
